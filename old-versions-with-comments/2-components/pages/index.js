@@ -3,6 +3,7 @@ import Speaker from '../src/components/Speaker';
 
 const IndexPage = () => {
 
+  // app uses bootstrap (it's not what we're learning here so this is faster)
   return (
     <div className="container speakers-list">
       <div className="row">
