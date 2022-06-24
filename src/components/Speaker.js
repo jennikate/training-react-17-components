@@ -18,7 +18,7 @@ const SpeakerImage = ({ id, first, last }) => {
   return (
     <div classname="speak-img d-flex flex-row justify-content-center align-items-center h-300">
       <img
-        className="contain-fit"
+        className="contain-fit h-300"
         src={`/images/speaker-${id}.jpg`}
         width="300"
         alt={`${first} ${last}`}
@@ -27,7 +27,22 @@ const SpeakerImage = ({ id, first, last }) => {
   )
 }
 
-const SpeakerDemographics = ({ first, last, bio, company, twitterHandle, favorite }) => {
+const SpeakerFavorite = ({ favorite, onFavoriteToggle }) => {
+  return (
+    <div className="action padB1">
+      <span
+        onClick={onFavoriteToggle}
+      >
+        <i className={ favorite === true ? "fa fa-star orange" : "fa fa-star-o orange" } />
+        {" "}
+        Favorite
+        {" "}
+      </span>
+    </div>
+  )
+}
+
+const SpeakerDemographics = ({ first, last, bio, company, twitterHandle, favorite, onFavoriteToggle }) => {
   return (
     <div className="speaker-info">
       <div className="d-flex justify-content-between mb-3">
@@ -35,6 +50,10 @@ const SpeakerDemographics = ({ first, last, bio, company, twitterHandle, favorit
           {first} {last}
         </h3>
       </div>
+      <SpeakerFavorite
+        favorite={favorite}
+        onFavoriteToggle={onFavoriteToggle}
+      />
       <div>
         <p className="card-description">
           {bio}
@@ -54,13 +73,13 @@ const SpeakerDemographics = ({ first, last, bio, company, twitterHandle, favorit
   )
 }
 
-const Speaker = ({ speaker, showSessions }) => {
+const Speaker = ({ speaker, showSessions, onFavoriteToggle }) => {
   const { id, first, last, sessions } = speaker;
   return (
     <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-sm-12 col-xs-12">
       <div className="card card-height p-4 mt-4">
         <SpeakerImage id={id} first={first} last={last} />
-        <SpeakerDemographics {...speaker} />
+        <SpeakerDemographics {...speaker} onFavoriteToggle={onFavoriteToggle} />
       </div>
       {showSessions === true ? <Sessions sessions={sessions} /> : null}
     </div>
