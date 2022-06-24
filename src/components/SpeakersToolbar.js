@@ -1,7 +1,5 @@
-import { useState } from 'react';
-
-const SpeakersToolbar = ({ theme, setTheme }) => {
-  const [showSessions, setShowSessions] = useState(true);
+const SpeakersToolbar = ({ theme, setTheme, showSessions, setShowSessions }) => {
+  // const [showSessions, setShowSessions] = useState(true);
   // const [theme, setTheme] = useState("light"); // when set here, theme is trapped in this component as it is a child of speakers and a sibling of speakers list and header
   // instead we will now lift it to the parent component (Speakers) and pass it down as props
   // because the theme setter was passed down from the parent, we can use it here to change the theme value in the parent
