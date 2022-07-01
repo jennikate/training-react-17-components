@@ -1,20 +1,20 @@
-import { useState } from 'React';
+import { useState } from "react";
 
 function useTheme(startingTheme = "light") {
   const [theme, setTheme] = useState(startingTheme);
 
   function validateTheme(themeValue) {
-    if (themeValue === 'dark') {
-      setTheme('dark');
+    if (themeValue === "dark") {
+      setTheme("dark");
     } else {
-      setTheme('light');
+      setTheme("light");
     }
   }
 
   return {
-    theme, 
-    setTheme
-  }
+    theme,
+    setTheme: validateTheme,
+  };
 }
 
 export default useTheme;
