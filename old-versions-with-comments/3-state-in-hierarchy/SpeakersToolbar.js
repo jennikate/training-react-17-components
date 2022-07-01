@@ -7,7 +7,7 @@ const SpeakersToolbar = ({ theme, setTheme, showSessions, setShowSessions }) => 
   return (
     <section className="toolbar dark-theme-header">
       <div className="container">
-        <div classname="justify-content-between">
+        <div className="justify-content-between">
           <ul className="toolrow d-flex-flex-colum flex-lg-row">
             <li className="d-flex flex-column flex-md-row">
               <b>Show Sessions&nbsp;&nbsp;</b>

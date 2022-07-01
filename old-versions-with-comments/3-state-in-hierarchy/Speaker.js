@@ -16,7 +16,7 @@ const Sessions = ({ sessions }) => {
 
 const SpeakerImage = ({ id, first, last }) => {
   return (
-    <div classname="speak-img d-flex flex-row justify-content-center align-items-center h-300">
+    <div className="speak-img d-flex flex-row justify-content-center align-items-center h-300">
       <img
         className="contain-fit h-300"
         src={`/images/speaker-${id}.jpg`}
