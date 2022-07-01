@@ -2,6 +2,7 @@ import React, { useContext, memo, useState } from 'react';
 import { SpeakerFilterContext } from '../contexts/SpeakerFilterContext';
 import { SpeakerProvider, SpeakerContext } from '../contexts/SpeakerContext';
 import SpeakerDelete from './SpeakerDelete';
+import ErrorBoundary from './ErrorBoundry';
 
 const Session = ({ title, room }) => {
   return (
@@ -113,7 +114,7 @@ function SpeakerDemographics() {
       <SpeakerFavorite />
       <div>
         <p className="card-description">
-          {bio}
+          {bio.substr(0, 70)}
         </p>
         <div className="social d-flex flex-row mt-4">
           <div className="company">
@@ -139,14 +140,29 @@ function SpeakerDemographics() {
 // the image doesn't change so we don't need to re-render it
 // we could memoize the speaker image component, but it's not worth it as it's just one
 // child that is rerendered (if the image was very large and slow to load, maybe we WOULD want to memoize it)
-const Speaker = memo(function Speaker({
+const SpeakerNoErrorBoundary = memo(function Speaker({
   speaker,
   updateRecord,
   insertRecord,
   deleteRecord,
+  showErrorCard
 }) {
   const { showSessions } = useContext(SpeakerFilterContext);
   console.log(`speaker: ${speaker.id} ${speaker.first} ${speaker.last}`);
+
+  if (showErrorCard) {
+    return (
+      <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-sm-12 col-xs-12">
+        <div className="card card-height p-4 mt-4">
+          <img src="/images/speaker-99999.jpg" />
+          <div>
+            <b>Error Showing Speaker</b>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <SpeakerProvider
       speaker={speaker}
@@ -165,7 +181,17 @@ const Speaker = memo(function Speaker({
     </SpeakerProvider>
   );
 },
-areEqualSpeaker);
+  areEqualSpeaker);
+
+function Speaker(props) {
+  return (
+    <ErrorBoundary
+      errorUI={ <SpeakerNoErrorBoundary {...props} showErrorCard={true} /> }
+    >
+      <SpeakerNoErrorBoundary {...props}></SpeakerNoErrorBoundary>
+    </ErrorBoundary>
+  );
+}
 
 // the only props we expect to change is the favorite
 // as the updateRecord, insert, and delete are static functions
