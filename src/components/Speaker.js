@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, memo, useState } from 'react';
 import { SpeakerFilterContext } from '../contexts/SpeakerFilterContext';
 import { SpeakerProvider, SpeakerContext } from '../contexts/SpeakerContext';
 import SpeakerDelete from './SpeakerDelete';
@@ -130,15 +130,30 @@ function SpeakerDemographics() {
   )
 }
 
-const Speaker = ({ speaker, updateRecord, insertRecord, deleteRecord }) => {
+// this function now knows to only rerender when the props have changed
+// we then pass a second param to memo to tell it whether the props we care about have changed
+// it's important here to stop the over re-renders as just say we have 1000 speakers
+// this could slow the app down significantly as it rerenders everything
+// we don't always want to stop the over re-renders though as it's not always going to offer a performance gain
+// e.g we see in profiler that even after doing this the speaker image always re-renders when favourite state is changed
+// the image doesn't change so we don't need to re-render it
+// we could memoize the speaker image component, but it's not worth it as it's just one
+// child that is rerendered (if the image was very large and slow to load, maybe we WOULD want to memoize it)
+const Speaker = memo(function Speaker({
+  speaker,
+  updateRecord,
+  insertRecord,
+  deleteRecord,
+}) {
   const { showSessions } = useContext(SpeakerFilterContext);
+  console.log(`speaker: ${speaker.id} ${speaker.first} ${speaker.last}`);
   return (
-    <SpeakerProvider 
+    <SpeakerProvider
       speaker={speaker}
       updateRecord={updateRecord}
       insertRecord={insertRecord}
       deleteRecord={deleteRecord}
-      >
+    >
       <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-sm-12 col-xs-12">
         <div className="card card-height p-4 mt-4">
           <SpeakerImage />
@@ -148,7 +163,14 @@ const Speaker = ({ speaker, updateRecord, insertRecord, deleteRecord }) => {
         <SpeakerDelete />
       </div>
     </SpeakerProvider>
-  )
+  );
+},
+areEqualSpeaker);
+
+// the only props we expect to change is the favorite
+// as the updateRecord, insert, and delete are static functions
+function areEqualSpeaker(prevProps, nextProps) {
+  return prevProps.speaker.favorite === nextProps.speaker.favorite;
 }
 
 export default Speaker;
