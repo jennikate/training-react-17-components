@@ -1,5 +1,9 @@
+import { useContext } from 'react';
+import { ThemeContext } from './App';
 
-const Header = ({ theme }) => {
+const Header = () => {
+  const { theme } = useContext(ThemeContext); // the header doesn't set the theme so just needs to import theme from context
+  
   return (
     <div className="padT4 padB4">
       <div className="container mobile-container">
