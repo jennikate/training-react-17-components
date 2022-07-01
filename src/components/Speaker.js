@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { SpeakerFilterContext } from '../contexts/SpeakerFilterContext';
 
-const Session = ({ title, room }) => { 
+const Session = ({ title, room }) => {
   return (
     <span className="session w-100">
-      {title} <strong>Room: {room}</strong>
+      {title} <strong>Room: {room.name}</strong>
     </span>
   )
 }
 
 const Sessions = ({ sessions }) => {
+  const { eventYear } = useContext(SpeakerFilterContext);
   return (
     <div className="sessionBox card h-250">
-      <Session title={sessions[0].title} room={sessions[0].room.name} />
+      {
+        sessions.filter((session) => {
+          return session.eventYear === eventYear;
+        })
+          .map((session) => {
+            return (
+              <div className="session w-100" key={session.id}>
+                <Session {...session} />
+              </div>
+            )
+          })
+      }
     </div>
   )
 }
@@ -50,7 +63,7 @@ function SpeakerFavorite({ favorite, onFavoriteToggle }) {
           return onFavoriteToggle(doneCallback); // on click, trigger onFavoriteToggle, which we pass in doneCallback function as a param to use
         }}
       >
-        <i className={ favorite === true ? "fa fa-star orange" : "fa fa-star-o orange" } />
+        <i className={favorite === true ? "fa fa-star orange" : "fa fa-star-o orange"} />
         {" "}
         Favorite
         {" "}
@@ -93,8 +106,9 @@ function SpeakerDemographics({ first, last, bio, company, twitterHandle, favorit
   )
 }
 
-const Speaker = ({ speaker, showSessions, onFavoriteToggle }) => {
+const Speaker = ({ speaker, onFavoriteToggle }) => {
   const { id, first, last, sessions } = speaker;
+  const { showSessions } = useContext(SpeakerFilterContext);
   return (
     <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-sm-12 col-xs-12">
       <div className="card card-height p-4 mt-4">
