@@ -1,12 +1,20 @@
-import React, { createContext, useState } from 'react';
-
-export const ThemeContext = createContext(); // create the context component
+import React, { useContext } from 'react';
+import { ThemeContext, ThemeProvider } from '../contexts/ThemeContext'
 
 function Layout({ startingTheme, children }) {
-  const [theme, setTheme] = useState(startingTheme);
+  return (
+    <ThemeProvider startingTheme={startingTheme}>
+      <LayoutNoThemeProvider>{children}</LayoutNoThemeProvider>
+    </ThemeProvider>
+  )
+}
+
+// first Layout gets the ThemeProvider
+// then LayoutNoThemeProvider can use the theme from it
+function LayoutNoThemeProvider({ children }) {
+  const { theme } = useContext(ThemeContext)
 
   return (
-    <ThemeContext.Provider value={{ setTheme, theme, }}>
       <div className={
         theme === "light" ? "container-fluid light" : "container-fluid dark"
       }>
@@ -17,7 +25,6 @@ function Layout({ startingTheme, children }) {
         in the App components, so that is what will get returned here */}
         {children}
       </div>
-    </ThemeContext.Provider>
   );
 }
 

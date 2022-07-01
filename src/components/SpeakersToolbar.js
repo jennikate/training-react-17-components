@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import {ThemeContext } from './Layout';
+import {ThemeContext } from '../contexts/ThemeContext';
 
 const SpeakersToolbar = ({ showSessions, setShowSessions }) => {
 // remove the props theme and setTheme as we don't pass them down anymore
